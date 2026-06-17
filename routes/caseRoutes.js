@@ -8,6 +8,7 @@ const {
   getCases,
   addCase,
   deleteCase,
+  bulkDeleteCases,
   updateCase,
 } = require(
   "../controllers/caseController"
@@ -26,6 +27,11 @@ router.post(
 router.put(
   "/:id",
   updateCase
+);
+
+router.delete(
+  "/bulk-delete",
+  bulkDeleteCases
 );
 
 router.delete(

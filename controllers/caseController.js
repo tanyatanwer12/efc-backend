@@ -64,6 +64,43 @@ const deleteCase =
     }
   };
 
+  // BULK DELETE CASES
+  const bulkDeleteCases = async (
+  req,
+  res
+) => {
+  try {
+    console.log("BODY:", req.body);
+
+    const { ids } = req.body;
+
+    console.log("IDS:", ids);
+
+    const result =
+      await Case.deleteMany({
+        _id: {
+          $in: ids,
+        },
+      });
+
+    console.log(
+      "DELETE RESULT:",
+      result
+    );
+
+    res.json({
+      message: "Success",
+    });
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).json({
+      message:
+        "Bulk delete failed",
+    });
+  }
+};
+
 // UPDATE CASE
 
 const updateCase =
@@ -93,5 +130,6 @@ module.exports = {
   getCases,
   addCase,
   deleteCase,
+  bulkDeleteCases,
   updateCase,
 };
