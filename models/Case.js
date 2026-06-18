@@ -21,6 +21,11 @@ const caseSchema =
 
       date: String,
 
+      visitType: {
+  type: String,
+  default: "Fresh",
+},
+
       verifierName: String,
 
       status: {
