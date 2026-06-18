@@ -20,6 +20,8 @@ const caseSchema =
 
       contactNo: String,
 
+      date: String,
+
       verifierName: String,
 
       status: {
