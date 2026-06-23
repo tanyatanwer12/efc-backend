@@ -9,7 +9,9 @@ const getCases = async (
 ) => {
   try {
     const cases =
-      await Case.find();
+  await Case.find({
+    isDeleted: false,
+  });
 
     res.json(cases);
   } catch (error) {
@@ -19,6 +21,29 @@ const getCases = async (
     });
   }
 };
+
+// GET DELETED CASES
+
+const getDeletedCases =
+  async (req, res) => {
+    try {
+
+      const cases =
+        await Case.find({
+          isDeleted: true,
+        });
+
+      res.json(cases);
+
+    } catch (error) {
+
+      res.status(500).json({
+        message:
+          "Error fetching deleted cases",
+      });
+
+    }
+  };
 
 // ADD CASE
 
@@ -48,19 +73,45 @@ const addCase = async (
 const deleteCase =
   async (req, res) => {
     try {
-      await Case.findByIdAndDelete(
+
+      console.log(
+        "DELETE REQUEST RECEIVED:",
         req.params.id
+      );
+
+      const result =
+        await Case.findByIdAndUpdate(
+          req.params.id,
+          {
+            isDeleted: true,
+          },
+          {
+            new: true,
+          }
+        );
+
+      console.log(
+        "UPDATED CASE:",
+        result
       );
 
       res.json({
         message:
           "Case Deleted",
       });
+
     } catch (error) {
+
+      console.log(
+        "DELETE ERROR:",
+        error
+      );
+
       res.status(500).json({
         message:
           "Delete Failed",
       });
+
     }
   };
 
@@ -77,11 +128,16 @@ const deleteCase =
     console.log("IDS:", ids);
 
     const result =
-      await Case.deleteMany({
-        _id: {
-          $in: ids,
-        },
-      });
+      await Case.updateMany(
+  {
+    _id: {
+      $in: ids,
+    },
+  },
+  {
+    isDeleted: true,
+  }
+);
 
     console.log(
       "DELETE RESULT:",
@@ -100,6 +156,63 @@ const deleteCase =
     });
   }
 };
+
+// RESTORE CASE
+
+const restoreCase =
+  async (req, res) => {
+
+    try {
+
+      await Case.findByIdAndUpdate(
+        req.params.id,
+        {
+          isDeleted: false,
+        }
+      );
+
+      res.json({
+        message:
+          "Case Restored",
+      });
+
+    } catch (error) {
+
+      res.status(500).json({
+        message:
+          "Restore Failed",
+      });
+
+    }
+
+  };
+
+  // PERMANENT DELETE
+
+const permanentDeleteCase =
+  async (req, res) => {
+
+    try {
+
+      await Case.findByIdAndDelete(
+        req.params.id
+      );
+
+      res.json({
+        message:
+          "Case Permanently Deleted",
+      });
+
+    } catch (error) {
+
+      res.status(500).json({
+        message:
+          "Delete Failed",
+      });
+
+    }
+
+  };
 
 // UPDATE CASE
 
@@ -128,6 +241,9 @@ const updateCase =
 
 module.exports = {
   getCases,
+  getDeletedCases,
+  restoreCase,
+  permanentDeleteCase,
   addCase,
   deleteCase,
   bulkDeleteCases,

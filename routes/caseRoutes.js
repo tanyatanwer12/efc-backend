@@ -6,6 +6,9 @@ const router =
 
 const {
   getCases,
+  getDeletedCases,
+  restoreCase,
+  permanentDeleteCase,
   addCase,
   deleteCase,
   bulkDeleteCases,
@@ -32,6 +35,21 @@ router.put(
 router.delete(
   "/bulk-delete",
   bulkDeleteCases
+);
+
+router.get(
+  "/deleted",
+  getDeletedCases
+);
+
+router.put(
+  "/restore/:id",
+  restoreCase
+);
+
+router.delete(
+  "/permanent/:id",
+  permanentDeleteCase
 );
 
 router.delete(

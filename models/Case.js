@@ -32,7 +32,11 @@ const caseSchema =
         type: String,
         default: "Pending",
       },
-
+      
+paymentStatus: {
+  type: String,
+  default: "Unpaid",
+},
       companyRate: {
         type: Number,
         default: 0,
@@ -47,6 +51,10 @@ const caseSchema =
         type: Number,
         default: 0,
       },
+      isDeleted: {
+  type: Boolean,
+  default: false,
+},
     },
     {
       timestamps: true,
