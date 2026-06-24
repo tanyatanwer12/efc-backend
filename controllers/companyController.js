@@ -52,9 +52,12 @@ const deleteCompany =
   async (req, res) => {
     try {
 
-      await Company.findByIdAndDelete(
-        req.params.id
-      );
+      await Company.findByIdAndUpdate(
+  req.params.id,
+  {
+    isDeleted: true,
+  }
+)
 
       await Case.updateMany(
         {
