@@ -2,6 +2,8 @@ const Company = require(
   "../models/Company"
 );
 
+const Case = require("../models/Case");
+
 // Get All Companies
 
 const getCompanies = async (
@@ -49,19 +51,35 @@ const addCompany = async (
 const deleteCompany =
   async (req, res) => {
     try {
+
       await Company.findByIdAndDelete(
         req.params.id
       );
 
+      await Case.updateMany(
+        {
+          companyId:
+            req.params.id,
+        },
+        {
+          isDeleted: true,
+        }
+      );
+
       res.json({
         message:
-          "Company Deleted",
+          "Company Deleted And Cases Moved To Recycle Bin",
       });
+
     } catch (error) {
+
+      console.log(error);
+
       res.status(500).json({
         message:
           "Delete Failed",
       });
+
     }
   };
 
