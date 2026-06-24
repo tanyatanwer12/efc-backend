@@ -13,7 +13,11 @@ const caseSchema =
 
       productType: String,
 
-      address: String,
+resiOffice: String,
+
+address: String,
+
+state: String,
 
       pincode: String,
 
